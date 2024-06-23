@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Parent.css'
-
+import axios from 'axios';
 import mar3 from '../assets/Group1.png'
 import mar4 from '../assets/Group2.png'
 import mar5 from '../assets/Group3.png'
@@ -18,8 +18,30 @@ import { useNavigate } from 'react-router-dom'
 const Parent = () => {
 
   const navigate = useNavigate();
-    const otpButton = () => {
+  const [email, setEmail] = useState('');
+
+ 
+
+  const handleChange = (e) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    
+  };
+  console.log(email);
+  
+
+
+    const otpButton = async () => {
+      try{
+      const response =  await axios.post('http://localhost:3000/php/login.php',{email},
+                        {headers: {'Content-Type' :'application/json'},}
+
+      );
+      console.log(response.data);
       navigate('/otp')
+    }catch(error){
+      console.error('There was an error!', error);
+    }
     };
 
   
@@ -55,7 +77,7 @@ const Parent = () => {
         
         <div className="parent2">
             <h3>Your email or Phone number</h3>
-            <input type="search" name="" id="subscribe" placeholder='Email or User name'/>
+            <input type="search" name="" id="subscribe" value={email} onChange={handleChange} placeholder='Email or User name'/>
 
             <button className="button" onClick={otpButton}>Login</button>
             <div className="or">
